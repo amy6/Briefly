@@ -8,9 +8,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okio.IOException
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class NewsRepositoryImpl(
-    private val newsApiService: NewsApiService
+class NewsRepositoryImpl @Inject constructor(
+    val newsApiService: NewsApiService
 ) : NewsRepository {
     override suspend fun getTopHeadlines(
         country: String,
