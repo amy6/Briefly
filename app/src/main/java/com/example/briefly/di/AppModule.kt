@@ -1,6 +1,8 @@
 package com.example.briefly.di
 
 import com.example.briefly.data.remote.NewsApiService
+import com.example.briefly.data.remote.NewsRepositoryImpl
+import com.example.briefly.domain.repository.NewsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,5 +35,12 @@ object AppModule {
             .build()
         return retrofit.create(NewsApiService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideNewsRepository(newsApiService: NewsApiService): NewsRepository {
+        return NewsRepositoryImpl(newsApiService)
+    }
+
 
 }
