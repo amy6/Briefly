@@ -39,7 +39,6 @@ class MainActivity : ComponentActivity() {
             BrieflyTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NewsList(
-                        viewModel = newsViewModel,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }

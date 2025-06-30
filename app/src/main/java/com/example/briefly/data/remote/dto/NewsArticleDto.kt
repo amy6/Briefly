@@ -1,5 +1,6 @@
 package com.example.briefly.data.remote.dto
 
+import com.example.briefly.data.remote.util.DateFormatter.formatDate
 import com.example.briefly.domain.model.NewsItem
 
 data class NewsArticleDto(
@@ -17,7 +18,7 @@ fun NewsArticleDto.toNewsItem(): NewsItem {
     return NewsItem(
         title = title,
         imageUrl = urlToImage,
-        publishedDate = publishedAt,
+        publishedDate = publishedAt?.formatDate(),
         content = content,
         author = author,
         source = source?.name,

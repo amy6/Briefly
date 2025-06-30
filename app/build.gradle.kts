@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.logging.interceptor)
     implementation(libs.hilt)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     kapt(libs.hilt.compiler)
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)

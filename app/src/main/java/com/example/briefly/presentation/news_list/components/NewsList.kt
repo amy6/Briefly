@@ -8,16 +8,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.briefly.NewsViewModel
 import com.example.briefly.presentation.NewsListState
 
 @Composable
 fun NewsList(
-    viewModel: NewsViewModel,
     modifier: Modifier = Modifier
 ) {
 
-    val newsListState = viewModel.state.collectAsState().value
+    val newsViewModel: NewsViewModel = viewModel()
+    val newsListState = newsViewModel.state.collectAsState().value
 
     when (newsListState) {
         is NewsListState.Loading -> {
