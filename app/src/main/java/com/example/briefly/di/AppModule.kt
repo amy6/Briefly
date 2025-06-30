@@ -28,9 +28,10 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNewsApiService(): NewsApiService {
+    fun provideNewsApiService(client: OkHttpClient): NewsApiService {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://newsapi.org/")
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         return retrofit.create(NewsApiService::class.java)

@@ -1,46 +1,73 @@
 package com.example.briefly
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.lifecycleScope
-import com.example.briefly.presentation.news_list.components.NewsList
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.briefly.presentation.Screen
+import com.example.briefly.presentation.news_detail.components.NewsDetailScreen
+import com.example.briefly.presentation.news_list.components.NewsListScreen
 import com.example.briefly.ui.theme.BrieflyTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    private val newsViewModel: NewsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val coroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-            throwable.printStackTrace()
-        }
-
-        lifecycleScope.launch(Dispatchers.Main + coroutineExceptionHandler) {
-            newsViewModel.getTopHeadlines("us", "")
-        }
-
         setContent {
             BrieflyTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NewsList(
+
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.NewsListScreen.route,
                         modifier = Modifier.padding(innerPadding)
-                    )
+                    ) {
+                        composable(
+                            route = Screen.NewsListScreen.route,
+                        )
+                        {
+                            NewsListScreen(
+                                navController = navController,
+                            )
+                        }
+                        composable(
+                            route = "${Screen.NewsDetailScreen.route}?title={title}&content={content}&imageUrl={imageUrl}",
+                            arguments = listOf(
+                                navArgument("title") {
+                                    type = NavType.StringType
+                                },
+                                navArgument("content") {
+                                    type = NavType.StringType
+                                },
+                                navArgument("imageUrl") {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) { backStackEntry ->
+                            NewsDetailScreen(
+                                Uri.decode(backStackEntry.arguments?.getString("title").orEmpty()),
+                                Uri.decode(backStackEntry.arguments?.getString("content").orEmpty()),
+                                Uri.decode(backStackEntry.arguments?.getString("imageUrl").orEmpty())
+                            )
+                        }
+
+                    }
+
                 }
             }
         }

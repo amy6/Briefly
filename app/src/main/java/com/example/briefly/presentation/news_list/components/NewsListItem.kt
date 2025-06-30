@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,10 +30,10 @@ import coil3.request.crossfade
 @Composable
 fun NewsListItem(
     title: String,
-    publishedAt: String,
-    imageUrl: String,
-    source: String,
-    author: String,
+    publishedAt: String?,
+    imageUrl: String?,
+    source: String?,
+    author: String?,
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
@@ -41,7 +42,7 @@ fun NewsListItem(
             modifier = modifier
                 .fillMaxWidth()
                 .clickable { onClick() }
-                .padding(16.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
@@ -52,46 +53,56 @@ fun NewsListItem(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
-                    maxLines = 2,
+                    maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.Bottom
                 ) {
-                    Column {
+                    Column(
+                        verticalArrangement = Arrangement.Bottom,
+                    ) {
+                        source?.let {
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        }
+                        author?.let {
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+
+                    }
+                    publishedAt?.let {
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = source,
-                            style = MaterialTheme.typography.bodyMedium,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                        Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text = author,
-                            style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.weight(1f),
+                            text = it,
+                            style = MaterialTheme.typography.bodySmall.copy(textAlign = TextAlign.End),
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = publishedAt,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
                 }
             }
+            Spacer(modifier = Modifier.width(8.dp))
             AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
+                model = ImageRequest
+                    .Builder(LocalContext.current)
                     .data(imageUrl)
                     .crossfade(true)
                     .build(),
                 contentDescription = null, // replace with string resources
-                modifier = Modifier
-                    .size(100.dp),
-                contentScale = ContentScale.Crop
+                modifier = Modifier.size(120.dp),
+                contentScale = ContentScale.Crop,
             )
         }
         HorizontalDivider()

@@ -3,50 +3,35 @@ package com.example.briefly.presentation.news_list.components
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.briefly.NewsViewModel
-import com.example.briefly.presentation.NewsListState
+import com.example.briefly.domain.model.NewsItem
 
 @Composable
 fun NewsList(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    news: List<NewsItem> = emptyList(),
+    onItemClick: (NewsItem) -> Unit = {}
 ) {
-
-    val newsViewModel: NewsViewModel = viewModel()
-    val newsListState = newsViewModel.state.collectAsState().value
-
-    when (newsListState) {
-        is NewsListState.Loading -> {
-            CircularProgressIndicator()
-        }
-
-        is NewsListState.Success -> {
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxSize(),
-            ) {
-                items(newsListState.newsItems) {
-                    it.apply {
-                        NewsListItem(
-                            title = title ?: "",
-                            publishedAt = publishedDate ?: "",
-                            imageUrl = imageUrl ?: "",
-                            source = source ?: "",
-                            author = author ?: ""
-                        )
-                    }
+    if (news.isNotEmpty()) {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize(),
+        ) {
+            items(news) {
+                it.apply {
+                    NewsListItem(
+                        title = title.orEmpty(),
+                        publishedAt = publishedDate,
+                        imageUrl = imageUrl,
+                        source = source,
+                        author = author,
+                        onClick = { onItemClick(it) }
+                    )
                 }
-
             }
-        }
 
-        is NewsListState.Error -> {
-            Text("Something went wrong")
         }
     }
+
 }
