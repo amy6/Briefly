@@ -15,13 +15,11 @@ class NewsRepositoryImpl @Inject constructor(
     val newsApiService: NewsApiService,
     val apiKey: String,
 ) : NewsRepository {
-    override suspend fun getTopHeadlines(
-        country: String,
-    ): Flow<Result<List<NewsItem>>> = flow {
+    override suspend fun getTopHeadlines(): Flow<Result<List<NewsItem>>> = flow {
         try {
             emit(Result.Loading())
-            val response = newsApiService.getTopHeadlines(country, apiKey).toNewsResponse()
-            emit(Result.Success(response.articles))
+            val response = newsApiService.getNews(apiKey).toNewsResponse()
+            emit(Result.Success(response.news))
         } catch (e: HttpException) {
             emit(Result.Error(e.localizedMessage ?: "An unexpected error occurred"))
         } catch (e: IOException) {

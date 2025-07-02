@@ -36,7 +36,7 @@ class NewsViewModelTest {
     fun `emits loading then success state`() = runTest {
         val newsItem = NewsItem(
             source = "CNN",
-            author = "Jacopo Prisco",
+            category = "Jacopo Prisco",
             title = "Long-dead satellite emits strong radio signal, puzzling astronomers",
             publishedDate = "30 Jun 11:05",
             imageUrl = "https://image.url",
@@ -46,7 +46,7 @@ class NewsViewModelTest {
         val articles = listOf(newsItem)
         val successResponse = Result.Success(articles)
 
-        coEvery { getNewsListUseCase(any()) } returns flow {
+        coEvery { getNewsListUseCase() } returns flow {
             emit(Result.Loading())
             delay(10)
             emit(successResponse)
@@ -57,21 +57,21 @@ class NewsViewModelTest {
             viewModel.state.toList(states)
         }
 
-        viewModel.getTopHeadlines("us")
+        viewModel.getTopHeadlines()
 
         advanceUntilIdle()
 
         assert(states[0] == NewsListState(isLoading = true))
         assert(states[1] == NewsListState(newsItems = articles))
 
-        coVerify { getNewsListUseCase("us") }
+        coVerify { getNewsListUseCase() }
 
         job.cancel()
     }
 
     @Test
     fun `emits loading then error state`() = runTest {
-        coEvery { getNewsListUseCase(any()) } returns flow {
+        coEvery { getNewsListUseCase() } returns flow {
             emit(Result.Loading())
             delay(10)
             emit(Result.Error("Something went wrong"))
@@ -82,7 +82,7 @@ class NewsViewModelTest {
             viewModel.state.toList(states)
         }
 
-        viewModel.getTopHeadlines("us")
+        viewModel.getTopHeadlines()
 
         advanceUntilIdle()
 

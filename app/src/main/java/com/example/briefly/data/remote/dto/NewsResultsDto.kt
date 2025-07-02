@@ -1,0 +1,21 @@
+package com.example.briefly.data.remote.dto
+
+import com.example.briefly.domain.model.NewsResponse
+
+data class NewsResponseDto(
+    val response: NewsResultsDto
+)
+
+data class NewsResultsDto(
+    val results: List<NewsItemDto>?,
+    val status: String?,
+    val total: Int?
+)
+
+fun NewsResponseDto.toNewsResponse() = with(response) {
+    NewsResponse(
+        news = results?.map { it.toNewsItem() } ?: emptyList(),
+        status = status ?: "",
+        totalResults = total ?: 0
+    )
+}

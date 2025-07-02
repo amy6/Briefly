@@ -21,9 +21,9 @@ class NewsViewModel @Inject constructor(
     private val _state = MutableStateFlow<NewsListState>(NewsListState())
     val state = _state
 
-    fun getTopHeadlines(country: String) {
+    fun getTopHeadlines() {
         viewModelScope.launch {
-            getNewsListUseCase(country)
+            getNewsListUseCase()
                 .onEach { result ->
                     _state.value = when (result) {
                         is Result.Loading -> NewsListState(isLoading = true)

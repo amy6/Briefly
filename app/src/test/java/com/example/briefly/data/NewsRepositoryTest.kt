@@ -2,10 +2,11 @@ package com.example.briefly.data
 
 import com.example.briefly.core.Result
 import com.example.briefly.data.remote.NewsApiService
-import com.example.briefly.data.remote.repository.NewsRepositoryImpl
-import com.example.briefly.data.remote.dto.NewsArticleDto
+import com.example.briefly.data.remote.dto.NewsFieldsDto
+import com.example.briefly.data.remote.dto.NewsItemDto
 import com.example.briefly.data.remote.dto.NewsResponseDto
-import com.example.briefly.data.remote.dto.NewsSourceDto
+import com.example.briefly.data.remote.dto.NewsResultsDto
+import com.example.briefly.data.remote.repository.NewsRepositoryImpl
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -27,29 +28,34 @@ class NewsRepositoryTest {
 
     @Test
     fun `getTopHeadlines should return a list of news items`() = runTest {
-        val sourceDto = NewsSourceDto(id = "1", name = "CNN")
-        val newsArticleDto = NewsArticleDto(
-            source = sourceDto,
-            author = "Jacopo Prisco",
-            title = "Long-dead satellite emits strong radio signal, puzzling astronomers",
-            description = "A NASA satellite that’s been orbiting as space junk since 1967...",
-            url = "https://cnn.com/article",
-            urlToImage = "https://image.url",
-            publishedAt = "2025-06-30T11:05:00Z",
-            content = "Astronomers in Australia picked up a strange radio signal..."
+        val fieldsDto = NewsFieldsDto(
+            bodyText = "Astronomers in Australia picked up a strange radio signal...",
+            publication = "CNN",
+            thumbnail = "https://image.url"
         )
-        val responseDto = NewsResponseDto(
-            articles = listOf(newsArticleDto),
+        val newsItemDto = NewsItemDto(
+            id = "1",
+            fields = fieldsDto,
+            sectionName = "Jacopo Prisco",
+            webTitle = "Long-dead satellite emits strong radio signal, puzzling astronomers",
+            webUrl = "https://cnn.com/article",
+            webPublicationDate = "2025-06-30T11:05:00Z",
+        )
+        val resultsDto = NewsResultsDto(
+            results = listOf(newsItemDto),
             status = "ok",
-            totalResults = 1
+            total = 1
         )
 
-        val country = "us"
+        val responseDto = NewsResponseDto(
+            response = resultsDto
+        )
+
         val apiKey = "dummy-api-key"
 
-        coEvery { newsApiService.getTopHeadlines(country, apiKey) } returns responseDto
+        coEvery { newsApiService.getNews(apiKey) } returns responseDto
 
-        val flowEmissions = repository.getTopHeadlines(country).toList()
+        val flowEmissions = repository.getTopHeadlines().toList()
 
         assertEquals(2, flowEmissions.size)
         assert(flowEmissions[0] is Result.Loading)
@@ -59,13 +65,13 @@ class NewsRepositoryTest {
 
         assertEquals(1, result?.size)
         assertEquals("CNN", result?.first()?.source)
-        assertEquals("Jacopo Prisco", result?.first()?.author)
+        assertEquals("Jacopo Prisco", result?.first()?.category)
         assertEquals(
             "Long-dead satellite emits strong radio signal, puzzling astronomers",
             result?.first()?.title
         )
 
-        coVerify(exactly = 1) { newsApiService.getTopHeadlines(country, apiKey) }
+        coVerify(exactly = 1) { newsApiService.getNews(apiKey) }
     }
 
 

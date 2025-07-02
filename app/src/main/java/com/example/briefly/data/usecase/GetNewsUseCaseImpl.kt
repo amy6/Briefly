@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 class GetNewsUseCaseImpl @Inject constructor(
     private val newsRepository: NewsRepository
 ) : GetNewsListUseCase {
-    override suspend fun invoke(input: String): Flow<Result<List<NewsItem>>> {
-        return newsRepository.getTopHeadlines(input)
+    override suspend fun invoke(): Flow<Result<List<NewsItem>>> {
+        return newsRepository.getTopHeadlines()
     }
 
 }

@@ -6,6 +6,7 @@ import com.example.briefly.data.remote.repository.NewsRepositoryImpl
 import com.example.briefly.data.usecase.GetNewsUseCaseImpl
 import com.example.briefly.domain.repository.NewsRepository
 import com.example.briefly.domain.usecase.GetNewsListUseCase
+import com.example.briefly.util.Constants.NEWS_API_BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,7 +34,7 @@ object AppModule {
     @Singleton
     fun provideNewsApiService(client: OkHttpClient): NewsApiService {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://newsapi.org/")
+            .baseUrl(NEWS_API_BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

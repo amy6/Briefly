@@ -1,17 +1,18 @@
 package com.example.briefly.data.remote
 
 import com.example.briefly.data.remote.dto.NewsResponseDto
-import com.example.briefly.domain.model.NewsResponse
+import com.example.briefly.util.Constants.DEFAULT_SHOW_FIELDS
+import com.example.briefly.util.Constants.PAGE_SIZE
 import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NewsApiService {
 
-    @GET("v2/top-headlines")
-    suspend fun getTopHeadlines(
-        @Query("country") country: String,
-        @Query("apiKey") apiKey: String
-    ): NewsResponseDto // update to domain response entity
-
+    @GET("search")
+    suspend fun getNews(
+        @Query("api-key") apiKey: String,
+        @Query("show-fields") showFields: String = DEFAULT_SHOW_FIELDS,
+        @Query("page-size") pageSize: Int = PAGE_SIZE,
+    ): NewsResponseDto
 
 }

@@ -30,7 +30,7 @@ class GetNewsUseCaseTest {
         val news = listOf(
             NewsItem(
                 source = "CNN",
-                author = "Jacopo Prisco",
+                category = "Jacopo Prisco",
                 title = "Long-dead satellite emits strong radio signal, puzzling astronomers",
                 publishedDate = "30 Jun 11:05",
                 imageUrl = "https://image.url",
@@ -38,9 +38,9 @@ class GetNewsUseCaseTest {
                 content = "Astronomers in Australia picked up a strange radio signal...",
             )
         )
-        coEvery { newsRepository.getTopHeadlines(any()) } returns flowOf(Result.Success(news))
+        coEvery { newsRepository.getTopHeadlines() } returns flowOf(Result.Success(news))
 
-        val result = useCase("us").first()
+        val result = useCase().first()
 
         assert(result is Result.Success<List<NewsItem>>)
         assertEquals(news, (result as Result.Success<List<NewsItem>>).data)
@@ -49,9 +49,9 @@ class GetNewsUseCaseTest {
     @Test
     fun `invoke returns flow with error result`() = runTest {
         val errorMessage = "Something went wrong"
-        coEvery { newsRepository.getTopHeadlines(any()) } returns flowOf(Result.Error(errorMessage))
+        coEvery { newsRepository.getTopHeadlines() } returns flowOf(Result.Error(errorMessage))
 
-        val result = useCase.invoke("us").first()
+        val result = useCase().first()
 
         assert(result is Result.Error)
         assertEquals(errorMessage, (result as Result.Error).message)
@@ -59,9 +59,9 @@ class GetNewsUseCaseTest {
 
     @Test
     fun `invoke returns flow with loading result`() = runTest {
-        coEvery { newsRepository.getTopHeadlines(any()) } returns flowOf(Result.Loading())
+        coEvery { newsRepository.getTopHeadlines() } returns flowOf(Result.Loading())
 
-        val result = useCase.invoke("us").first()
+        val result = useCase().first()
 
         assert(result is Result.Loading)
     }

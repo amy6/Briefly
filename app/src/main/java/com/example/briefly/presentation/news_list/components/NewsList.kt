@@ -25,7 +25,7 @@ fun NewsList(
                         publishedAt = publishedDate,
                         imageUrl = imageUrl,
                         source = source,
-                        author = author,
+                        author = category,
                         onClick = { onItemClick(it) }
                     )
                 }

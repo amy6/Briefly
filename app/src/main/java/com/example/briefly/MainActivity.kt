@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        viewModel.getTopHeadlines("us")
+        viewModel.getTopHeadlines()
 
         setContent {
             BrieflyTheme {
