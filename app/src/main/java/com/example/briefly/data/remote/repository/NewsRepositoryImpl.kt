@@ -1,6 +1,7 @@
-package com.example.briefly.data.remote
+package com.example.briefly.data.remote.repository
 
 import com.example.briefly.core.Result
+import com.example.briefly.data.remote.NewsApiService
 import com.example.briefly.data.remote.dto.toNewsResponse
 import com.example.briefly.domain.model.NewsItem
 import com.example.briefly.domain.repository.NewsRepository

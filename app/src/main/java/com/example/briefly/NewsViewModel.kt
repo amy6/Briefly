@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.briefly.core.Result
 import com.example.briefly.core.Result.Success
-import com.example.briefly.domain.repository.NewsRepository
+import com.example.briefly.domain.usecase.GetNewsListUseCase
 import com.example.briefly.presentation.NewsListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
-    val newsRepository: NewsRepository,
+    val getNewsListUseCase: GetNewsListUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<NewsListState>(NewsListState())
@@ -23,7 +23,7 @@ class NewsViewModel @Inject constructor(
 
     fun getTopHeadlines(country: String) {
         viewModelScope.launch {
-            newsRepository.getTopHeadlines(country)
+            getNewsListUseCase(country)
                 .onEach { result ->
                     _state.value = when (result) {
                         is Result.Loading -> NewsListState(isLoading = true)

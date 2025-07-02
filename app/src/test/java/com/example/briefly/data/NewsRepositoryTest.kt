@@ -2,7 +2,7 @@ package com.example.briefly.data
 
 import com.example.briefly.core.Result
 import com.example.briefly.data.remote.NewsApiService
-import com.example.briefly.data.remote.NewsRepositoryImpl
+import com.example.briefly.data.remote.repository.NewsRepositoryImpl
 import com.example.briefly.data.remote.dto.NewsArticleDto
 import com.example.briefly.data.remote.dto.NewsResponseDto
 import com.example.briefly.data.remote.dto.NewsSourceDto

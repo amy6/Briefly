@@ -3,7 +3,7 @@ package com.example.briefly.presentation
 import com.example.briefly.NewsViewModel
 import com.example.briefly.core.Result
 import com.example.briefly.domain.model.NewsItem
-import com.example.briefly.domain.repository.NewsRepository
+import com.example.briefly.domain.usecase.GetNewsListUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -24,12 +24,12 @@ class NewsViewModelTest {
     @get:Rule
     val dispatcherRule = MainDispatcherRule()
 
-    private val newsRepository: NewsRepository = mockk()
+    private val getNewsListUseCase = mockk<GetNewsListUseCase>()
     private lateinit var viewModel: NewsViewModel
 
     @Before
     fun setUp() {
-        viewModel = NewsViewModel(newsRepository)
+        viewModel = NewsViewModel(getNewsListUseCase)
     }
 
     @Test
@@ -46,7 +46,7 @@ class NewsViewModelTest {
         val articles = listOf(newsItem)
         val successResponse = Result.Success(articles)
 
-        coEvery { newsRepository.getTopHeadlines(any()) } returns flow {
+        coEvery { getNewsListUseCase(any()) } returns flow {
             emit(Result.Loading())
             delay(10)
             emit(successResponse)
@@ -64,14 +64,14 @@ class NewsViewModelTest {
         assert(states[0] == NewsListState(isLoading = true))
         assert(states[1] == NewsListState(newsItems = articles))
 
-        coVerify { newsRepository.getTopHeadlines("us") }
+        coVerify { getNewsListUseCase("us") }
 
         job.cancel()
     }
 
     @Test
     fun `emits loading then error state`() = runTest {
-        coEvery { newsRepository.getTopHeadlines(any()) } returns flow {
+        coEvery { getNewsListUseCase(any()) } returns flow {
             emit(Result.Loading())
             delay(10)
             emit(Result.Error("Something went wrong"))

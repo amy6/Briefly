@@ -2,8 +2,10 @@ package com.example.briefly.di
 
 import com.example.briefly.BuildConfig
 import com.example.briefly.data.remote.NewsApiService
-import com.example.briefly.data.remote.NewsRepositoryImpl
+import com.example.briefly.data.remote.repository.NewsRepositoryImpl
+import com.example.briefly.data.usecase.GetNewsUseCaseImpl
 import com.example.briefly.domain.repository.NewsRepository
+import com.example.briefly.domain.usecase.GetNewsListUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,6 +47,12 @@ object AppModule {
             newsApiService = newsApiService,
             apiKey = BuildConfig.API_KEY
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideNewsUseCase(newsRepository: NewsRepository): GetNewsListUseCase {
+        return GetNewsUseCaseImpl(newsRepository)
     }
 
 }
