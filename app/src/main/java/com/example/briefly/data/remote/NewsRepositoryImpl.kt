@@ -11,11 +11,11 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class NewsRepositoryImpl @Inject constructor(
-    val newsApiService: NewsApiService
+    val newsApiService: NewsApiService,
+    val apiKey: String,
 ) : NewsRepository {
     override suspend fun getTopHeadlines(
         country: String,
-        apiKey: String
     ): Flow<Result<List<NewsItem>>> = flow {
         try {
             emit(Result.Loading())

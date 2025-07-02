@@ -15,20 +15,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
-    val newsRepository: NewsRepository
+    val newsRepository: NewsRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<NewsListState>(NewsListState())
     val state = _state
 
-    init {
-        val apiKey = BuildConfig.API_KEY
-        getTopHeadlines("us", apiKey)
-    }
-
-    fun getTopHeadlines(country: String, apiKey: String) {
+    fun getTopHeadlines(country: String) {
         viewModelScope.launch {
-            newsRepository.getTopHeadlines(country, apiKey)
+            newsRepository.getTopHeadlines(country)
                 .onEach { result ->
                     _state.value = when (result) {
                         is Result.Loading -> NewsListState(isLoading = true)

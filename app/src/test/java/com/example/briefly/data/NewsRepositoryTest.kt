@@ -22,7 +22,7 @@ class NewsRepositoryTest {
 
     @Before
     fun setUp() {
-        repository = NewsRepositoryImpl(newsApiService)
+        repository = NewsRepositoryImpl(newsApiService, "dummy-api-key")
     }
 
     @Test
@@ -49,7 +49,7 @@ class NewsRepositoryTest {
 
         coEvery { newsApiService.getTopHeadlines(country, apiKey) } returns responseDto
 
-        val flowEmissions = repository.getTopHeadlines(country, apiKey).toList()
+        val flowEmissions = repository.getTopHeadlines(country).toList()
 
         assertEquals(2, flowEmissions.size)
         assert(flowEmissions[0] is Result.Loading)

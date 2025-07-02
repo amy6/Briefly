@@ -1,5 +1,6 @@
 package com.example.briefly.di
 
+import com.example.briefly.BuildConfig
 import com.example.briefly.data.remote.NewsApiService
 import com.example.briefly.data.remote.NewsRepositoryImpl
 import com.example.briefly.domain.repository.NewsRepository
@@ -40,8 +41,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideNewsRepository(newsApiService: NewsApiService): NewsRepository {
-        return NewsRepositoryImpl(newsApiService)
+        return NewsRepositoryImpl(
+            newsApiService = newsApiService,
+            apiKey = BuildConfig.API_KEY
+        )
     }
-
 
 }

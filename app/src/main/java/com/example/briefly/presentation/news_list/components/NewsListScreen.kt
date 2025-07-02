@@ -7,6 +7,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -19,19 +20,19 @@ import com.example.briefly.presentation.Screen
 fun NewsListScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
+    newsViewModel: NewsViewModel = hiltViewModel()
 ) {
 
-    val newsViewModel: NewsViewModel = hiltViewModel()
-    val newsListState = newsViewModel.state.collectAsState().value
-
+    val newsListState by newsViewModel.state.collectAsState()
+    val news = newsListState.newsItems
     Box(
         modifier = modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        if (newsListState.newsItems.isNotEmpty()) {
+        if (news.isNotEmpty()) {
             NewsList(
-                news = newsListState.newsItems,
+                news = news,
                 onItemClick = {
                     val encodedTitle = Uri.encode(it.title)
                     val encodedContent = Uri.encode(it.content)
