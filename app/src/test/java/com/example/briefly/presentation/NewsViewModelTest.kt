@@ -35,13 +35,14 @@ class NewsViewModelTest {
     @Test
     fun `emits loading then success state`() = runTest {
         val newsItem = NewsItem(
-            source = "CNN",
-            category = "Jacopo Prisco",
+            id = "1",
             title = "Long-dead satellite emits strong radio signal, puzzling astronomers",
-            publishedDate = "30 Jun 11:05",
             imageUrl = "https://image.url",
-            url = "https://cnn.com/article",
+            publishedDate = "30 Jun 11:05",
             content = "Astronomers in Australia picked up a strange radio signal...",
+            category = "Jacopo Prisco",
+            source = "CNN",
+            url = "https://cnn.com/article",
         )
         val articles = listOf(newsItem)
         val successResponse = Result.Success(articles)

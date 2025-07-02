@@ -14,6 +14,7 @@ data class NewsItemDto(
 
 fun NewsItemDto.toNewsItem(): NewsItem {
     return NewsItem(
+        id = id,
         title = webTitle,
         imageUrl = fields?.thumbnail,
         publishedDate = webPublicationDate?.formatDate(),

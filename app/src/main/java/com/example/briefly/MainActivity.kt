@@ -1,6 +1,5 @@
 package com.example.briefly
 
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -43,9 +42,7 @@ class MainActivity : ComponentActivity() {
                         startDestination = Screen.NewsListScreen.route,
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        composable(
-                            route = Screen.NewsListScreen.route,
-                        )
+                        composable(route = Screen.NewsListScreen.route)
                         {
                             NewsListScreen(
                                 navController = navController,
@@ -53,24 +50,14 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(
-                            route = "${Screen.NewsDetailScreen.route}?title={title}&content={content}&imageUrl={imageUrl}",
+                            route = "${Screen.NewsDetailScreen.route}?{id}",
                             arguments = listOf(
-                                navArgument("title") {
+                                navArgument(name = "id") {
                                     type = NavType.StringType
-                                },
-                                navArgument("content") {
-                                    type = NavType.StringType
-                                },
-                                navArgument("imageUrl") {
-                                    type = NavType.StringType
+                                    nullable = false
                                 }
-                            )
-                        ) { backStackEntry ->
-                            NewsDetailScreen(
-                                Uri.decode(backStackEntry.arguments?.getString("title").orEmpty()),
-                                Uri.decode(backStackEntry.arguments?.getString("content").orEmpty()),
-                                Uri.decode(backStackEntry.arguments?.getString("imageUrl").orEmpty())
-                            )
+                            )) {
+                            NewsDetailScreen()
                         }
 
                     }

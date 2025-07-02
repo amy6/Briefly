@@ -1,6 +1,5 @@
 package com.example.briefly.presentation.news_list
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -34,11 +33,7 @@ fun NewsListScreen(
             NewsList(
                 news = news,
                 onItemClick = {
-                    val encodedTitle = Uri.encode(it.title)
-                    val encodedContent = Uri.encode(it.content)
-                    val encodedImageUrl = Uri.encode(it.imageUrl)
-
-                    navController.navigate("${Screen.NewsDetailScreen.route}?title=$encodedTitle&content=$encodedContent&imageUrl=$encodedImageUrl")
+                    navController.navigate("${Screen.NewsDetailScreen.route}?${it.id}")
                 })
         }
 

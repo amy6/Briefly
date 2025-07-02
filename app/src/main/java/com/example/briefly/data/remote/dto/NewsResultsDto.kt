@@ -33,7 +33,7 @@ fun NewsResponseDto.toNewsResponse() = with(response) {
 
 fun NewsByIdResponseDto.toNewsByIdResponse() = with(response) {
     NewsByIdResponse(
-        content = content!!.toNewsItem(),
+        content = content?.toNewsItem(),
         status = status ?: "",
         totalResults = total ?: 0
 
