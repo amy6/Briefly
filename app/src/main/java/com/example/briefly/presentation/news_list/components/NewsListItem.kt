@@ -1,10 +1,13 @@
 package com.example.briefly.presentation.news_list.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -37,18 +40,22 @@ fun NewsListItem(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
-    Column {
+    Column(
+        modifier = modifier
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .background(color = MaterialTheme.colorScheme.surface)
+    ) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .clickable { onClick() }
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
+                .height(IntrinsicSize.Min)
+                .clickable { onClick() },
         ) {
             Column(
                 modifier = Modifier
-                    .padding(end = 4.dp)
+                    .fillMaxHeight()
                     .weight(1f),
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     text = title,
@@ -56,44 +63,51 @@ fun NewsListItem(
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.height(24.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom
+                    verticalAlignment = Alignment.Bottom,
                 ) {
                     Column(
-                        verticalArrangement = Arrangement.Bottom,
+                        modifier = Modifier.weight(1f),
                     ) {
                         source?.let {
-                            Text(
-                                text = it,
-                                style = MaterialTheme.typography.bodyMedium,
-                                fontWeight = FontWeight.SemiBold
-                            )
+                            if (it.isNotBlank()) {
+                                Text(
+                                    text = it,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                )
+                            }
                         }
                         author?.let {
-                            Spacer(modifier = Modifier.height(2.dp))
-                            Text(
-                                text = it,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            if (it.isNotBlank()) {
+                                Text(
+                                    text = it,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         }
 
                     }
                     publishedAt?.let {
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = it,
-                            style = MaterialTheme.typography.bodySmall.copy(textAlign = TextAlign.End),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
+                        if (it.isNotBlank()) {
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(
+                                text = it,
+                                style = MaterialTheme.typography.bodySmall.copy(textAlign = TextAlign.End),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1
+                            )
+                        }
                     }
                 }
             }
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             AsyncImage(
                 model = ImageRequest
                     .Builder(LocalContext.current)
@@ -105,12 +119,12 @@ fun NewsListItem(
                 contentScale = ContentScale.Crop,
             )
         }
-        HorizontalDivider()
     }
+    HorizontalDivider()
 }
 
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun NewsListItemPreview() {
     NewsListItem(
