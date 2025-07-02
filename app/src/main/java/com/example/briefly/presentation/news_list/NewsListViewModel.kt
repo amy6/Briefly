@@ -1,9 +1,8 @@
-package com.example.briefly
+package com.example.briefly.presentation.news_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.briefly.core.Result
-import com.example.briefly.core.Result.Success
 import com.example.briefly.domain.usecase.GetNewsListUseCase
 import com.example.briefly.presentation.NewsListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +27,7 @@ class NewsListViewModel @Inject constructor(
                     _state.value = when (result) {
                         is Result.Loading -> NewsListState(isLoading = true)
 
-                        is Success -> NewsListState(newsItems = result.data.orEmpty())
+                        is Result.Success -> NewsListState(newsItems = result.data.orEmpty())
 
                         is Result.Error -> NewsListState(error = result.message.orEmpty())
                     }

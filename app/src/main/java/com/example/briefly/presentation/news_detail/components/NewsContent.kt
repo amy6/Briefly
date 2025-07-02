@@ -19,7 +19,7 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 
 @Composable
-fun NewsDetailScreen(
+fun NewsContent(
     title: String,
     content: String?,
     imageUrl: String?,

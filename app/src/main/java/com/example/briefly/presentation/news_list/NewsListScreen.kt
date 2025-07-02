@@ -1,4 +1,4 @@
-package com.example.briefly.presentation.news_list.components
+package com.example.briefly.presentation.news_list
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
@@ -13,8 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.briefly.NewsListViewModel
 import com.example.briefly.presentation.Screen
+import com.example.briefly.presentation.news_list.components.NewsList
 
 @Composable
 fun NewsListScreen(

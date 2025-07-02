@@ -1,6 +1,6 @@
 package com.example.briefly.presentation
 
-import com.example.briefly.NewsListViewModel
+import com.example.briefly.presentation.news_list.NewsListViewModel
 import com.example.briefly.core.Result
 import com.example.briefly.domain.model.NewsItem
 import com.example.briefly.domain.usecase.GetNewsListUseCase

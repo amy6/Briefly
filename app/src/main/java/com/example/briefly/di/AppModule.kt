@@ -3,8 +3,10 @@ package com.example.briefly.di
 import com.example.briefly.BuildConfig
 import com.example.briefly.data.remote.NewsApiService
 import com.example.briefly.data.remote.repository.NewsRepositoryImpl
+import com.example.briefly.data.usecase.GetNewsByIdUseCaseImpl
 import com.example.briefly.data.usecase.GetNewsUseCaseImpl
 import com.example.briefly.domain.repository.NewsRepository
+import com.example.briefly.domain.usecase.GetNewsByIdUseCase
 import com.example.briefly.domain.usecase.GetNewsListUseCase
 import com.example.briefly.util.Constants.NEWS_API_BASE_URL
 import dagger.Module
@@ -54,6 +56,12 @@ object AppModule {
     @Singleton
     fun provideNewsUseCase(newsRepository: NewsRepository): GetNewsListUseCase {
         return GetNewsUseCaseImpl(newsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNewsByIdUseCase(newsRepository: NewsRepository): GetNewsByIdUseCase {
+        return GetNewsByIdUseCaseImpl(newsRepository)
     }
 
 }

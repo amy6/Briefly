@@ -16,8 +16,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.briefly.presentation.Screen
-import com.example.briefly.presentation.news_detail.components.NewsDetailScreen
-import com.example.briefly.presentation.news_list.components.NewsListScreen
+import com.example.briefly.presentation.news_detail.NewsDetailScreen
+import com.example.briefly.presentation.news_list.NewsListScreen
+import com.example.briefly.presentation.news_list.NewsListViewModel
 import com.example.briefly.ui.theme.BrieflyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
