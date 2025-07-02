@@ -26,7 +26,7 @@ class GetNewsUseCaseTest {
     }
 
     @Test
-    fun `invoke returns flow with success result`() = runTest {
+    fun `returns flow with success result`() = runTest {
         val news = listOf(
             NewsItem(
                 source = "CNN",
@@ -38,7 +38,7 @@ class GetNewsUseCaseTest {
                 content = "Astronomers in Australia picked up a strange radio signal...",
             )
         )
-        coEvery { newsRepository.getTopHeadlines() } returns flowOf(Result.Success(news))
+        coEvery { newsRepository.getNewsList() } returns flowOf(Result.Success(news))
 
         val result = useCase().first()
 
@@ -47,9 +47,9 @@ class GetNewsUseCaseTest {
     }
 
     @Test
-    fun `invoke returns flow with error result`() = runTest {
+    fun `returns flow with error result`() = runTest {
         val errorMessage = "Something went wrong"
-        coEvery { newsRepository.getTopHeadlines() } returns flowOf(Result.Error(errorMessage))
+        coEvery { newsRepository.getNewsList() } returns flowOf(Result.Error(errorMessage))
 
         val result = useCase().first()
 
@@ -58,8 +58,8 @@ class GetNewsUseCaseTest {
     }
 
     @Test
-    fun `invoke returns flow with loading result`() = runTest {
-        coEvery { newsRepository.getTopHeadlines() } returns flowOf(Result.Loading())
+    fun `returns flow with loading result`() = runTest {
+        coEvery { newsRepository.getNewsList() } returns flowOf(Result.Loading())
 
         val result = useCase().first()
 

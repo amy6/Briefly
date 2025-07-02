@@ -11,7 +11,7 @@ class GetNewsUseCaseImpl @Inject constructor(
     private val newsRepository: NewsRepository
 ) : GetNewsListUseCase {
     override suspend fun invoke(): Flow<Result<List<NewsItem>>> {
-        return newsRepository.getTopHeadlines()
+        return newsRepository.getNewsList()
     }
 
 }

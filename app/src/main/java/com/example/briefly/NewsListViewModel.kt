@@ -14,14 +14,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsViewModel @Inject constructor(
+class NewsListViewModel @Inject constructor(
     val getNewsListUseCase: GetNewsListUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<NewsListState>(NewsListState())
     val state = _state
 
-    fun getTopHeadlines() {
+    fun getNewsList() {
         viewModelScope.launch {
             getNewsListUseCase()
                 .onEach { result ->

@@ -1,6 +1,6 @@
 package com.example.briefly.presentation
 
-import com.example.briefly.NewsViewModel
+import com.example.briefly.NewsListViewModel
 import com.example.briefly.core.Result
 import com.example.briefly.domain.model.NewsItem
 import com.example.briefly.domain.usecase.GetNewsListUseCase
@@ -25,11 +25,11 @@ class NewsViewModelTest {
     val dispatcherRule = MainDispatcherRule()
 
     private val getNewsListUseCase = mockk<GetNewsListUseCase>()
-    private lateinit var viewModel: NewsViewModel
+    private lateinit var viewModel: NewsListViewModel
 
     @Before
     fun setUp() {
-        viewModel = NewsViewModel(getNewsListUseCase)
+        viewModel = NewsListViewModel(getNewsListUseCase)
     }
 
     @Test
@@ -57,7 +57,7 @@ class NewsViewModelTest {
             viewModel.state.toList(states)
         }
 
-        viewModel.getTopHeadlines()
+        viewModel.getNewsList()
 
         advanceUntilIdle()
 
@@ -82,7 +82,7 @@ class NewsViewModelTest {
             viewModel.state.toList(states)
         }
 
-        viewModel.getTopHeadlines()
+        viewModel.getNewsList()
 
         advanceUntilIdle()
 

@@ -24,13 +24,13 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel: NewsViewModel by viewModels()
+    private val viewModel: NewsListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        viewModel.getTopHeadlines()
+        viewModel.getNewsList()
 
         setContent {
             BrieflyTheme {
@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                         {
                             NewsListScreen(
                                 navController = navController,
-                                newsViewModel = viewModel
+                                newsListViewModel = viewModel
                             )
                         }
                         composable(

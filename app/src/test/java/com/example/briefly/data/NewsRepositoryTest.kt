@@ -27,7 +27,7 @@ class NewsRepositoryTest {
     }
 
     @Test
-    fun `getTopHeadlines should return a list of news items`() = runTest {
+    fun `getNewsList should return a list of news items`() = runTest {
         val fieldsDto = NewsFieldsDto(
             bodyText = "Astronomers in Australia picked up a strange radio signal...",
             publication = "CNN",
@@ -53,9 +53,9 @@ class NewsRepositoryTest {
 
         val apiKey = "dummy-api-key"
 
-        coEvery { newsApiService.getNews(apiKey) } returns responseDto
+        coEvery { newsApiService.getNewsList(apiKey) } returns responseDto
 
-        val flowEmissions = repository.getTopHeadlines().toList()
+        val flowEmissions = repository.getNewsList().toList()
 
         assertEquals(2, flowEmissions.size)
         assert(flowEmissions[0] is Result.Loading)
@@ -71,7 +71,7 @@ class NewsRepositoryTest {
             result?.first()?.title
         )
 
-        coVerify(exactly = 1) { newsApiService.getNews(apiKey) }
+        coVerify(exactly = 1) { newsApiService.getNewsList(apiKey) }
     }
 
 

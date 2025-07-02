@@ -13,17 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.briefly.NewsViewModel
+import com.example.briefly.NewsListViewModel
 import com.example.briefly.presentation.Screen
 
 @Composable
 fun NewsListScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    newsViewModel: NewsViewModel = hiltViewModel()
+    newsListViewModel: NewsListViewModel = hiltViewModel()
 ) {
 
-    val newsListState by newsViewModel.state.collectAsState()
+    val newsListState by newsListViewModel.state.collectAsState()
     val news = newsListState.newsItems
     Box(
         modifier = modifier

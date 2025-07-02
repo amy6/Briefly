@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface NewsApiService {
 
     @GET("search")
-    suspend fun getNews(
+    suspend fun getNewsList(
         @Query("api-key") apiKey: String,
         @Query("show-fields") showFields: String = DEFAULT_SHOW_FIELDS,
         @Query("page-size") pageSize: Int = PAGE_SIZE,

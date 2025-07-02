@@ -5,5 +5,5 @@ import com.example.briefly.domain.model.NewsItem
 import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
-    suspend fun getTopHeadlines(): Flow<Result<List<NewsItem>>>
+    suspend fun getNewsList(): Flow<Result<List<NewsItem>>>
 }
