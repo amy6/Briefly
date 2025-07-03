@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsDetailViewModel @Inject constructor(
-    private val getNewsByIdUseCase: GetNewsByIdUseCase,
+    val getNewsByIdUseCase: GetNewsByIdUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _state = MutableStateFlow<NewsDetailState>(NewsDetailState())
@@ -23,7 +23,9 @@ class NewsDetailViewModel @Inject constructor(
 
     init {
         savedStateHandle.get<String>(ARGUMENT_ID)?.let { id ->
-            getNewsById(id)
+            if (id.isNotBlank()) {
+                getNewsById(id)
+            }
         }
     }
 

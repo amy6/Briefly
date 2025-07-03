@@ -2,12 +2,6 @@ package com.example.briefly.di
 
 import com.example.briefly.BuildConfig
 import com.example.briefly.data.remote.NewsApiService
-import com.example.briefly.data.remote.repository.NewsRepositoryImpl
-import com.example.briefly.data.usecase.GetNewsByIdUseCaseImpl
-import com.example.briefly.data.usecase.GetNewsUseCaseImpl
-import com.example.briefly.domain.repository.NewsRepository
-import com.example.briefly.domain.usecase.GetNewsByIdUseCase
-import com.example.briefly.domain.usecase.GetNewsListUseCase
 import com.example.briefly.util.Constants.NEWS_API_BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -17,11 +11,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object NetworkModule {
 
     @Provides
     @Singleton
@@ -44,24 +39,7 @@ object AppModule {
     }
 
     @Provides
-    @Singleton
-    fun provideNewsRepository(newsApiService: NewsApiService): NewsRepository {
-        return NewsRepositoryImpl(
-            newsApiService = newsApiService,
-            apiKey = BuildConfig.API_KEY
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideNewsUseCase(newsRepository: NewsRepository): GetNewsListUseCase {
-        return GetNewsUseCaseImpl(newsRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideNewsByIdUseCase(newsRepository: NewsRepository): GetNewsByIdUseCase {
-        return GetNewsByIdUseCaseImpl(newsRepository)
-    }
+    @Named("api_key")
+    fun provideNewsApiKey(): String = BuildConfig.API_KEY
 
 }

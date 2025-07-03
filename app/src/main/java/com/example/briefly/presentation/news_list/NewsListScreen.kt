@@ -3,6 +3,7 @@ package com.example.briefly.presentation.news_list
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -43,7 +44,8 @@ fun NewsListScreen(
 
         if (newsListState.error.isNotEmpty()) {
             Text(
-                "Something went wrong",
+                newsListState.error,
+                color = MaterialTheme.colorScheme.error,
                 textAlign = TextAlign.Center,
             )
         }
