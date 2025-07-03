@@ -32,7 +32,7 @@ class NewsListViewModel @Inject constructor(
                             is Result.Loading -> NewsListState.Loading
 
                             is Result.Success -> when (result.data.isNullOrEmpty()) {
-                                true -> NewsListState.Empty
+                                true -> NewsListState.Error("No news articles found")
                                 false -> NewsListState.Success(result.data)
                             }
 

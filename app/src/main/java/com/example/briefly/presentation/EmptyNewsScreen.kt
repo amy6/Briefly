@@ -26,7 +26,8 @@ import com.example.briefly.R
 @Composable
 fun EmptyNewsScreen(
     modifier: Modifier = Modifier,
-    onRetry: () -> Unit
+    message: String?,
+    onRetry: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -44,11 +45,15 @@ fun EmptyNewsScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Text(
-            text = "No news articles found",
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center
-        )
+        message?.let {
+            if (it.isNotBlank()) {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
