@@ -14,6 +14,7 @@ import androidx.navigation.navArgument
 import com.example.briefly.presentation.news_detail.NewsDetailScreen
 import com.example.briefly.presentation.news_list.NewsListScreen
 import com.example.briefly.presentation.news_list.NewsListViewModel
+import com.example.briefly.util.Constants.ARGUMENT_ID
 
 @Composable
 fun NewsApp(newsListViewModel: NewsListViewModel = hiltViewModel()) {
@@ -33,9 +34,9 @@ fun NewsApp(newsListViewModel: NewsListViewModel = hiltViewModel()) {
                 )
             }
             composable(
-                route = "${Screen.NewsDetailScreen.route}?{id}",
+                route = "${Screen.NewsDetailScreen.route}?{$ARGUMENT_ID}",
                 arguments = listOf(
-                    navArgument(name = "id") {
+                    navArgument(name = ARGUMENT_ID) {
                         type = NavType.StringType
                         nullable = false
                     }
