@@ -1,9 +1,9 @@
 package com.example.briefly.presentation
 
-import com.example.briefly.presentation.news_list.NewsListViewModel
 import com.example.briefly.core.Result
 import com.example.briefly.domain.model.NewsItem
 import com.example.briefly.domain.usecase.GetNewsListUseCase
+import com.example.briefly.presentation.news_list.NewsListViewModel
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -26,11 +25,6 @@ class NewsViewModelTest {
 
     private val getNewsListUseCase = mockk<GetNewsListUseCase>()
     private lateinit var viewModel: NewsListViewModel
-
-    @Before
-    fun setUp() {
-        viewModel = NewsListViewModel(getNewsListUseCase)
-    }
 
     @Test
     fun `emits loading then success state`() = runTest {
@@ -58,6 +52,7 @@ class NewsViewModelTest {
             viewModel.state.toList(states)
         }
 
+        viewModel = NewsListViewModel(getNewsListUseCase)
         viewModel.getNewsList()
 
         advanceUntilIdle()
@@ -83,6 +78,7 @@ class NewsViewModelTest {
             viewModel.state.toList(states)
         }
 
+        viewModel = NewsListViewModel(getNewsListUseCase)
         viewModel.getNewsList()
 
         advanceUntilIdle()

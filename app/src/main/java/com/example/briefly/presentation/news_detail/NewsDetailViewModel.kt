@@ -8,6 +8,7 @@ import com.example.briefly.domain.usecase.GetNewsByIdUseCase
 import com.example.briefly.util.Constants.ARGUMENT_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -19,7 +20,7 @@ class NewsDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val _state = MutableStateFlow<NewsDetailState>(NewsDetailState())
-    val state = _state
+    val state = _state.asStateFlow()
 
     init {
         savedStateHandle.get<String>(ARGUMENT_ID)?.let { id ->

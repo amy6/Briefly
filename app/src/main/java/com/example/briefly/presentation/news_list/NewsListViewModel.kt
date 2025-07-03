@@ -7,6 +7,7 @@ import com.example.briefly.domain.usecase.GetNewsListUseCase
 import com.example.briefly.presentation.NewsListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -18,7 +19,11 @@ class NewsListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<NewsListState>(NewsListState())
-    val state = _state
+    val state = _state.asStateFlow()
+
+    init {
+        getNewsList()
+    }
 
     fun getNewsList() {
         viewModelScope.launch {

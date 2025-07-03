@@ -78,5 +78,4 @@ class NewsRepositoryTest {
         coVerify(exactly = 1) { newsApiService.getNewsList(apiKey) }
     }
 
-
 }
