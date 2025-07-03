@@ -57,8 +57,8 @@ class NewsViewModelTest {
 
         advanceUntilIdle()
 
-        assert(states[0] == NewsListState(isLoading = true))
-        assert(states[1] == NewsListState(newsItems = articles))
+        assert(states[0] == NewsListState.Loading)
+        assert(states[1] == NewsListState.Success(articles))
 
         coVerify { getNewsListUseCase() }
 
@@ -84,8 +84,8 @@ class NewsViewModelTest {
         advanceUntilIdle()
 
         assert(states.size == 2)
-        assert(states[0] == NewsListState(isLoading = true))
-        assert(states[1] == NewsListState(error = "Something went wrong"))
+        assert(states[0] == NewsListState.Loading)
+        assert(states[1] == NewsListState.Error("Something went wrong"))
 
         job.cancel()
     }
