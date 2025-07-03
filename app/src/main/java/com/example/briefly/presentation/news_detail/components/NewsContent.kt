@@ -76,7 +76,7 @@ fun NewsContent(
                 .data(imageUrl)
                 .crossfade(true)
                 .build(),
-            contentDescription = null, // replace with string resources
+            contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(240.dp),

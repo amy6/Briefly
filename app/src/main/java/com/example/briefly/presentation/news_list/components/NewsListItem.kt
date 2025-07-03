@@ -116,7 +116,7 @@ fun NewsListItem(
                     .data(imageUrl)
                     .crossfade(true)
                     .build(),
-                contentDescription = null, // replace with string resources
+                contentDescription = null,
                 modifier = Modifier.size(120.dp),
                 contentScale = ContentScale.Crop,
             )
