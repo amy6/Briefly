@@ -8,8 +8,6 @@ import com.example.briefly.presentation.NewsListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +16,7 @@ class NewsListViewModel @Inject constructor(
     val getNewsListUseCase: GetNewsListUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<NewsListState>(NewsListState())
+    private val _state = MutableStateFlow<NewsListState>(NewsListState.Loading)
     val state = _state.asStateFlow()
 
     init {
@@ -28,16 +26,22 @@ class NewsListViewModel @Inject constructor(
     fun getNewsList() {
         viewModelScope.launch {
             getNewsListUseCase()
-                .onEach { result ->
-                    _state.value = when (result) {
-                        is Result.Loading -> NewsListState(isLoading = true)
+                .collect { result ->
+                    _state.value =
+                        when (result) {
+                            is Result.Loading -> NewsListState.Loading
 
-                        is Result.Success -> NewsListState(newsItems = result.data.orEmpty())
+                            is Result.Success -> when (result.data.isNullOrEmpty()) {
+                                true -> NewsListState.Empty
+                                false -> NewsListState.Success(result.data)
+                            }
 
-                        is Result.Error -> NewsListState(error = result.message.orEmpty())
-                    }
-                }.collect()
+                            is Result.Error -> NewsListState.Error(
+                                result.message ?: "Something went wrong"
+                            )
+
+                        }
+                }
         }
-
     }
 }

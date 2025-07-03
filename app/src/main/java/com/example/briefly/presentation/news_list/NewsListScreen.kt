@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.briefly.presentation.EmptyNewsScreen
+import com.example.briefly.presentation.NewsListState
 import com.example.briefly.presentation.Screen
 import com.example.briefly.presentation.news_list.components.NewsList
 
@@ -24,30 +26,28 @@ fun NewsListScreen(
 ) {
 
     val newsListState by newsListViewModel.state.collectAsState()
-    val news = newsListState.newsItems
+
     Box(
         modifier = modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        if (news.isNotEmpty()) {
-            NewsList(
-                news = news,
-                onItemClick = {
-                    navController.navigate("${Screen.NewsDetailScreen.route}?${it.id}")
-                })
-        }
+        when (val state = newsListState) {
+            NewsListState.Empty -> EmptyNewsScreen(onRetry = { newsListViewModel.getNewsList() })
 
-        if (newsListState.isLoading) {
-            CircularProgressIndicator()
-        }
-
-        if (newsListState.error.isNotEmpty()) {
-            Text(
-                newsListState.error,
+            is NewsListState.Error -> Text(
+                text = state.message,
                 color = MaterialTheme.colorScheme.error,
                 textAlign = TextAlign.Center,
             )
+
+            NewsListState.Loading -> CircularProgressIndicator()
+
+            is NewsListState.Success -> NewsList(
+                news = state.newsItems,
+                onItemClick = {
+                    navController.navigate("${Screen.NewsDetailScreen.route}?${it.id}")
+                })
         }
     }
 
