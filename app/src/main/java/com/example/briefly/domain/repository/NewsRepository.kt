@@ -5,6 +5,7 @@ import com.example.briefly.domain.model.NewsItem
 import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
-    suspend fun getNewsList(): Flow<Result<List<NewsItem>>>
+    suspend fun refreshNewsList(): Result<Unit>
+    suspend fun getNewsList(): Flow<List<NewsItem>>
     suspend fun getNewsById(id: String): Flow<Result<NewsItem>>
 }

@@ -6,4 +6,5 @@ object Constants {
     const val DETAIL_SHOW_FIELDS = "thumbnail,bodyText"
     const val PAGE_SIZE = 100
     const val ARGUMENT_ID = "id"
+    const val DB_NAME = "news_db"
 }

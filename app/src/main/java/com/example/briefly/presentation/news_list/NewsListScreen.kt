@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.briefly.presentation.EmptyNewsScreen
-import com.example.briefly.presentation.NewsListState
 import com.example.briefly.presentation.Screen
 import com.example.briefly.presentation.news_list.components.NewsList
 
@@ -29,16 +28,16 @@ fun NewsListScreen(
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        when (val state = newsListState) {
-            is NewsListState.Error -> EmptyNewsScreen(
-                message = state.message,
+        when {
+            newsListState.error.isNullOrEmpty().not() -> EmptyNewsScreen(
+                message = newsListState.error,
                 onRetry = { newsListViewModel.getNewsList() }
             )
 
-            NewsListState.Loading -> CircularProgressIndicator()
+            newsListState.isLoading -> CircularProgressIndicator()
 
-            is NewsListState.Success -> NewsList(
-                news = state.newsItems,
+            else -> NewsList(
+                news = newsListState.news,
                 onItemClick = {
                     navController.navigate("${Screen.NewsDetailScreen.route}?${it.id}")
                 })
