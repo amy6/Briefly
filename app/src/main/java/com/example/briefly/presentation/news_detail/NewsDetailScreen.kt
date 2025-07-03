@@ -30,6 +30,8 @@ fun NewsDetailScreen(
                 title = it.title.orEmpty(),
                 content = it.content,
                 imageUrl = it.imageUrl,
+                category = it.category,
+                publishedDate = it.publishedDate,
             )
         }
 
