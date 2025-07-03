@@ -56,7 +56,11 @@ class NewsListViewModel @Inject constructor(
         viewModelScope.launch {
             val result = refreshNewsListUseCase()
             when (result) {
-                is Success -> Unit
+                is Success -> _state.update {
+                    it.copy(
+                        isLoading = false
+                    )
+                }
                 is Loading -> Unit
                 is Error -> _state.update {
                     it.copy(

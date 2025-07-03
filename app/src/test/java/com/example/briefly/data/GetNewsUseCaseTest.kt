@@ -1,6 +1,5 @@
 package com.example.briefly.data
 
-import com.example.briefly.core.Result
 import com.example.briefly.data.usecase.GetNewsUseCaseImpl
 import com.example.briefly.domain.model.NewsItem
 import com.example.briefly.domain.repository.NewsRepository
@@ -26,7 +25,7 @@ class GetNewsUseCaseTest {
     }
 
     @Test
-    fun `returns flow with success result`() = runTest {
+    fun `usecase should return list of news items from repository`() = runTest {
         val news = listOf(
             NewsItem(
                 id = "1",
@@ -39,31 +38,10 @@ class GetNewsUseCaseTest {
                 url = "https://cnn.com/article",
             )
         )
-        coEvery { newsRepository.getNewsList() } returns flowOf(Result.Success(news))
+        coEvery { newsRepository.getNewsList() } returns flowOf(news)
 
         val result = useCase().first()
 
-        assert(result is Result.Success<List<NewsItem>>)
-        assertEquals(news, (result as Result.Success<List<NewsItem>>).data)
-    }
-
-    @Test
-    fun `returns flow with error result`() = runTest {
-        val errorMessage = "Something went wrong"
-        coEvery { newsRepository.getNewsList() } returns flowOf(Result.Error(errorMessage))
-
-        val result = useCase().first()
-
-        assert(result is Result.Error)
-        assertEquals(errorMessage, (result as Result.Error).message)
-    }
-
-    @Test
-    fun `returns flow with loading result`() = runTest {
-        coEvery { newsRepository.getNewsList() } returns flowOf(Result.Loading())
-
-        val result = useCase().first()
-
-        assert(result is Result.Loading)
+        assertEquals(result, news)
     }
 }

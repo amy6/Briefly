@@ -1,6 +1,9 @@
 package com.example.briefly.data
 
 import com.example.briefly.core.Result
+import com.example.briefly.data.local.dao.NewsDao
+import com.example.briefly.data.local.entity.NewsEntity
+import com.example.briefly.data.local.entity.toNewsItem
 import com.example.briefly.data.remote.NewsApiService
 import com.example.briefly.data.remote.dto.NewsFieldsDto
 import com.example.briefly.data.remote.dto.NewsItemDto
@@ -9,11 +12,13 @@ import com.example.briefly.data.remote.dto.NewsResultsDto
 import com.example.briefly.data.remote.repository.NewsRepositoryImpl
 import com.example.briefly.data.remote.util.NetworkUtils
 import io.mockk.coEvery
+import io.mockk.coJustRun
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
-import kotlinx.coroutines.flow.toList
+import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -22,60 +27,69 @@ class NewsRepositoryTest {
 
     private val newsApiService: NewsApiService = mockk()
     private val networkUtils: NetworkUtils = mockk()
+    private val newsDao: NewsDao = mockk()
     private lateinit var repository: NewsRepositoryImpl
 
     @Before
     fun setUp() {
-        repository = NewsRepositoryImpl(newsApiService, "dummy-api-key", networkUtils)
+        repository = NewsRepositoryImpl(newsApiService, newsDao, "dummy-api-key", networkUtils)
     }
 
     @Test
-    fun `getNewsList should return a list of news items`() = runTest {
-        val fieldsDto = NewsFieldsDto(
-            bodyText = "Astronomers in Australia picked up a strange radio signal...",
-            publication = "CNN",
-            thumbnail = "https://image.url"
+    fun `getNewsList should return data from dao`() = runTest {
+        val newsEntities = listOf(
+            NewsEntity(
+                id = "1",
+                title = "Long-dead satellite emits strong radio signal, puzzling astronomers",
+                imageUrl = "https://image.url",
+                publishedAt = "30 Jun 11:05",
+                content = "Astronomers in Australia picked up a strange radio signal...",
+                category = "Jacopo Prisco",
+                source = "CNN",
+            )
         )
-        val newsItemDto = NewsItemDto(
-            id = "1",
-            fields = fieldsDto,
-            sectionName = "Jacopo Prisco",
-            webTitle = "Long-dead satellite emits strong radio signal, puzzling astronomers",
-            webUrl = "https://cnn.com/article",
-            webPublicationDate = "2025-06-30T11:05:00Z",
-        )
-        val resultsDto = NewsResultsDto(
-            results = listOf(newsItemDto),
-            status = "ok",
-            total = 1
-        )
+        val expectedNewsItems = newsEntities.map { it.toNewsItem() }
 
-        val responseDto = NewsResponseDto(
-            response = resultsDto
-        )
+        coEvery { newsDao.getNews() } returns flowOf(newsEntities)
 
-        val apiKey = "dummy-api-key"
+        val result = repository.getNewsList().first()
 
-        every { networkUtils.isConnected() } returns true
-        coEvery { newsApiService.getNewsList(apiKey) } returns responseDto
+        assertEquals(expectedNewsItems, result)
+    }
 
-        val flowEmissions = repository.getNewsList().toList()
+    @Test
+    fun `refreshNewsList should fetch data from api and insert into db`() = runTest {
+        coEvery { networkUtils.isConnected() } returns true
 
-        assertEquals(2, flowEmissions.size)
-        assert(flowEmissions[0] is Result.Loading)
-        assert(flowEmissions[1] is Result.Success)
-
-        val result = flowEmissions[1].data
-
-        assertEquals(1, result?.size)
-        assertEquals("CNN", result?.first()?.source)
-        assertEquals("Jacopo Prisco", result?.first()?.category)
-        assertEquals(
-            "Long-dead satellite emits strong radio signal, puzzling astronomers",
-            result?.first()?.title
+        val apiResponse = NewsResponseDto(
+            response = NewsResultsDto(
+                results = listOf(
+                    NewsItemDto(
+                        id = "1",
+                        webTitle = "Long-dead satellite emits strong radio signal, puzzling astronomers",
+                        fields = NewsFieldsDto(
+                            thumbnail = "https://image.url",
+                            bodyText = "Astronomers in Australia picked up a strange radio signal...",
+                            publication = "CNN"
+                        ),
+                        webPublicationDate = "30 Jun 11:05",
+                        sectionName = "Football",
+                        webUrl = "https://example.url"
+                    )
+                ),
+                status = "ok",
+                total = 1
+            )
         )
 
-        coVerify(exactly = 1) { newsApiService.getNewsList(apiKey) }
+        coEvery { newsApiService.getNewsList(any()) } returns apiResponse
+
+        coJustRun { newsDao.insertNews(any()) }
+
+        val result = repository.refreshNewsList()
+
+        assertTrue(result is Result.Success)
+        coVerify { newsDao.insertNews(match { it.size == 1 && it[0].id == "1" }) }
     }
 
 }

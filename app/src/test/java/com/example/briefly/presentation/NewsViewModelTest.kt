@@ -3,15 +3,15 @@ package com.example.briefly.presentation
 import com.example.briefly.core.Result
 import com.example.briefly.domain.model.NewsItem
 import com.example.briefly.domain.usecase.GetNewsListUseCase
+import com.example.briefly.domain.usecase.RefreshNewsListUseCase
 import com.example.briefly.presentation.news_list.NewsListViewModel
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
+import junit.framework.TestCase.assertNull
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -24,10 +24,11 @@ class NewsViewModelTest {
     val dispatcherRule = MainDispatcherRule()
 
     private val getNewsListUseCase = mockk<GetNewsListUseCase>()
+    private val refreshNewsListUseCase = mockk<RefreshNewsListUseCase>()
     private lateinit var viewModel: NewsListViewModel
 
     @Test
-    fun `emits loading then success state`() = runTest {
+    fun `getNewsList should update state with news list and set loading false`() = runTest {
         val newsItem = NewsItem(
             id = "1",
             title = "Long-dead satellite emits strong radio signal, puzzling astronomers",
@@ -39,54 +40,34 @@ class NewsViewModelTest {
             url = "https://cnn.com/article",
         )
         val articles = listOf(newsItem)
-        val successResponse = Result.Success(articles)
 
-        coEvery { getNewsListUseCase() } returns flow {
-            emit(Result.Loading())
-            delay(10)
-            emit(successResponse)
-        }
+        coEvery { getNewsListUseCase() } returns flowOf(articles)
+        coEvery { refreshNewsListUseCase() } returns Result.Success(Unit)
 
-        val states = mutableListOf<NewsListState>()
-        val job = launch {
-            viewModel.state.toList(states)
-        }
-
-        viewModel = NewsListViewModel(getNewsListUseCase)
-        viewModel.getNewsList()
+        viewModel = NewsListViewModel(getNewsListUseCase, refreshNewsListUseCase)
 
         advanceUntilIdle()
 
-        assert(states[0] == NewsListState.Loading)
-        assert(states[1] == NewsListState.Success(articles))
-
-        coVerify { getNewsListUseCase() }
-
-        job.cancel()
+        val state = viewModel.state.value
+        assertEquals(articles, state.news)
+        assertFalse(state.isLoading)
+        assertNull(state.error)
     }
 
     @Test
-    fun `emits loading then error state`() = runTest {
-        coEvery { getNewsListUseCase() } returns flow {
-            emit(Result.Loading())
-            delay(10)
-            emit(Result.Error("Something went wrong"))
-        }
+    fun `refreshNewsList should update state with error message`() = runTest {
+        val errorMessage = "Something went wrong"
+        coEvery { getNewsListUseCase() } returns flowOf(emptyList())
+        coEvery { refreshNewsListUseCase() } returns Result.Error(errorMessage)
 
-        val states = mutableListOf<NewsListState>()
-        val job = launch {
-            viewModel.state.toList(states)
-        }
-
-        viewModel = NewsListViewModel(getNewsListUseCase)
-        viewModel.getNewsList()
+        viewModel = NewsListViewModel(getNewsListUseCase, refreshNewsListUseCase)
 
         advanceUntilIdle()
 
-        assert(states.size == 2)
-        assert(states[0] == NewsListState.Loading)
-        assert(states[1] == NewsListState.Error("Something went wrong"))
+        val state = viewModel.state.value
+        assertFalse(state.isLoading)
+        assertEquals(errorMessage, state.error)
 
-        job.cancel()
     }
+
 }
