@@ -2,6 +2,7 @@ package com.example.briefly.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.briefly.data.remote.util.DateFormatter.formatDate
 import com.example.briefly.domain.model.NewsItem
 
 @Entity(tableName = "news")
@@ -20,7 +21,7 @@ fun NewsEntity.toNewsItem(): NewsItem {
         id = id,
         title = title,
         imageUrl = imageUrl,
-        publishedDate = publishedAt,
+        publishedDate = publishedAt?.formatDate(),
         source = source,
         category = category,
         content = content,

@@ -4,14 +4,13 @@ import com.example.briefly.core.Result
 import com.example.briefly.data.local.dao.NewsDao
 import com.example.briefly.data.local.entity.toNewsItem
 import com.example.briefly.data.remote.NewsApiService
-import com.example.briefly.data.remote.dto.toNewsByIdResponse
 import com.example.briefly.data.remote.dto.toNewsEntity
 import com.example.briefly.data.remote.util.NetworkUtils
-import com.example.briefly.data.remote.util.safeApiFlow
 import com.example.briefly.domain.model.NewsItem
 import com.example.briefly.domain.repository.NewsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -43,9 +42,14 @@ class NewsRepositoryImpl @Inject constructor(
         newsDao.getNews().map { it.map { it.toNewsItem() } }
 
 
-    override suspend fun getNewsById(id: String): Flow<Result<NewsItem>> =
-        safeApiFlow(networkUtils) {
-            val response = newsApiService.getNewsById(id, apiKey).toNewsByIdResponse()
-            response.content ?: throw IllegalArgumentException("No article by ID $id found")
-        }
+    override suspend fun getNewsById(id: String): Flow<NewsItem> =
+        newsDao.getNewsById(id).onEach { article ->
+            if (article.content == null) {
+                val newsArticleFromRemote = newsApiService.getNewsById(id, apiKey)
+                newsDao.updateArticleContent(
+                    id,
+                    newsArticleFromRemote.response.content?.fields?.bodyText.orEmpty()
+                )
+            }
+        }.map { it.toNewsItem() }
 }

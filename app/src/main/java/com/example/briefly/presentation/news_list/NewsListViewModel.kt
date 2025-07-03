@@ -23,7 +23,7 @@ class NewsListViewModel @Inject constructor(
     val refreshNewsListUseCase: RefreshNewsListUseCase,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<NewsListState>(NewsListState())
+    private val _state = MutableStateFlow(NewsListState())
     val state = _state.asStateFlow()
 
     init {
