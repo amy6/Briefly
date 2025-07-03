@@ -7,8 +7,10 @@ import com.example.briefly.data.remote.dto.NewsItemDto
 import com.example.briefly.data.remote.dto.NewsResponseDto
 import com.example.briefly.data.remote.dto.NewsResultsDto
 import com.example.briefly.data.remote.repository.NewsRepositoryImpl
+import com.example.briefly.data.remote.util.NetworkUtils
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.toList
@@ -19,11 +21,12 @@ import org.junit.Test
 class NewsRepositoryTest {
 
     private val newsApiService: NewsApiService = mockk()
+    private val networkUtils: NetworkUtils = mockk()
     private lateinit var repository: NewsRepositoryImpl
 
     @Before
     fun setUp() {
-        repository = NewsRepositoryImpl(newsApiService, "dummy-api-key")
+        repository = NewsRepositoryImpl(newsApiService, "dummy-api-key", networkUtils)
     }
 
     @Test
@@ -53,6 +56,7 @@ class NewsRepositoryTest {
 
         val apiKey = "dummy-api-key"
 
+        every { networkUtils.isConnected() } returns true
         coEvery { newsApiService.getNewsList(apiKey) } returns responseDto
 
         val flowEmissions = repository.getNewsList().toList()
