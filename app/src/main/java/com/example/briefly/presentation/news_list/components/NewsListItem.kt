@@ -29,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import coil3.request.error
+import com.example.briefly.R
 
 @Composable
 fun NewsListItem(
@@ -114,6 +116,7 @@ fun NewsListItem(
                 model = ImageRequest
                     .Builder(LocalContext.current)
                     .data(imageUrl)
+                    .error(R.drawable.news_image_error)
                     .crossfade(true)
                     .build(),
                 contentDescription = null,
