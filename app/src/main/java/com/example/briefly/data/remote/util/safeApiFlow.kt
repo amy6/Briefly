@@ -1,30 +1,32 @@
 package com.example.briefly.data.remote.util
 
 import com.example.briefly.core.Result
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.withTimeout
 import okio.IOException
 import retrofit2.HttpException
 
-inline fun <T> safeApiFlow(
+suspend inline fun <T> safeApiFlow(
     networkUtils: NetworkUtils,
+    timeoutMillis: Long = 15_000,
     crossinline apiCall: suspend () -> T,
-): Flow<Result<T>> = flow {
-    emit(Result.Loading())
-
+): Result<T> {
     if (!networkUtils.isConnected()) {
-        emit(Result.Error("No internet connection"))
-        return@flow
+        return Result.Error("No internet connection")
     }
 
-    try {
-        val response = apiCall()
-        emit(Result.Success(response))
+    return try {
+        val response = withTimeout(timeoutMillis) { apiCall() }
+        Result.Success(response)
+    } catch (e: TimeoutCancellationException) {
+        Result.Error("Request timed out. Please try again.")
     } catch (e: HttpException) {
-        emit(Result.Error(e.localizedMessage ?: "An unexpected error occurred"))
+        Result.Error(e.localizedMessage ?: "An unexpected error occurred")
     } catch (e: IOException) {
-        emit(Result.Error("Couldn't reach server. Check your internet connection."))
+        Result.Error("Couldn't reach server. Check your internet connection.")
     } catch (e: Exception) {
-        emit(Result.Error("Something went wrong: ${e.localizedMessage}"))
+        if (e is CancellationException) throw e
+        Result.Error("Something went wrong: ${e.localizedMessage}")
     }
 }
