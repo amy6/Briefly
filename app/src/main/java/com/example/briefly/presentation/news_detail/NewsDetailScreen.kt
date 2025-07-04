@@ -20,18 +20,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavHostController
+import com.example.briefly.R
 import com.example.briefly.presentation.news_detail.components.NewsContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsDetailScreen(
     modifier: Modifier = Modifier,
-    newsDetailViewModel: NewsDetailViewModel = hiltViewModel()
+    newsDetailViewModel: NewsDetailViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
-    val navController = rememberNavController()
     val newsState by newsDetailViewModel.state.collectAsStateWithLifecycle()
     val news = newsState.newsContent
     val context = LocalContext.current
@@ -50,7 +52,7 @@ fun NewsDetailScreen(
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = null,
+                            contentDescription = stringResource(R.string.action_navigate_back),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -68,7 +70,7 @@ fun NewsDetailScreen(
                         }) {
                             Icon(
                                 imageVector = Icons.Default.Share,
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.action_share),
                                 tint = MaterialTheme.colorScheme.onSurface
                             )
                         }

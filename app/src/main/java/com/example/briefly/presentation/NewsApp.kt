@@ -73,7 +73,7 @@ fun NewsApp(
                 )
             }
         ) {
-            NewsDetailScreen()
+            NewsDetailScreen(navController = navController)
         }
     }
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -119,7 +120,7 @@ fun NewsListItem(
                     .error(R.drawable.news_image_error)
                     .crossfade(true)
                     .build(),
-                contentDescription = null,
+                contentDescription = stringResource(R.string.news_image),
                 modifier = Modifier.size(120.dp),
                 contentScale = ContentScale.Crop,
             )

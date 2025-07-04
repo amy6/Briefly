@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,7 +39,7 @@ fun EmptyNewsScreen(
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.empty_list),
-            contentDescription = null,
+            contentDescription = stringResource(R.string.no_data_available),
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(96.dp)
         )
@@ -69,7 +70,7 @@ fun EmptyNewsScreen(
         Button(onClick = onRetry) {
             Icon(
                 Icons.Default.Refresh,
-                contentDescription = null
+                contentDescription = stringResource(R.string.action_refresh)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text("Retry")

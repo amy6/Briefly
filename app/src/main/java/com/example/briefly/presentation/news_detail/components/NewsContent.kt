@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -83,7 +84,7 @@ fun NewsContent(
                 .error(R.drawable.news_image_error)
                 .crossfade(true)
                 .build(),
-            contentDescription = null,
+            contentDescription = stringResource(R.string.news_image),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(240.dp),

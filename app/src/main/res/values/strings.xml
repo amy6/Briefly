@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Briefly</string>
+    <string name="action_navigate_back">Back</string>
+    <string name="no_data_available">No data available</string>
+    <string name="news_image">News image</string>
+    <string name="action_refresh">action_refresh</string>
+    <string name="action_share">Share</string>
 </resources>
