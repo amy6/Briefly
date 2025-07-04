@@ -16,6 +16,14 @@ A modern Android news app that displays the latest headlines using the Guardian 
 
 ## 📸 Screenshots
 
+![news_list_light](https://github.com/user-attachments/assets/06f45b59-a73c-4dd3-a3eb-42520a60805b)    ![news_detail_light](https://github.com/user-attachments/assets/cea564bf-4ccc-48bc-a41f-e9fb268580db)
+
+
+
+
+![news_list](https://github.com/user-attachments/assets/900bff00-9123-4c41-aba3-847fcabe686f)    ![news_detail](https://github.com/user-attachments/assets/d25bed41-0160-4cc7-99cc-e7561f5949ec)
+
+
 
 
 ---
