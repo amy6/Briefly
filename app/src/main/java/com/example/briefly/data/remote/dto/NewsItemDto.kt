@@ -34,6 +34,7 @@ fun NewsItemDto.toNewsEntity(): NewsEntity {
         publishedAt = webPublicationDate,
         source = fields?.publication,
         category = sectionName,
-        content = fields?.bodyText
+        content = fields?.bodyText,
+        url = webUrl
     )
 }

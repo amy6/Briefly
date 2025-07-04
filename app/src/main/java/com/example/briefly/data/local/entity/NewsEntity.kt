@@ -13,7 +13,8 @@ data class NewsEntity(
     val publishedAt: String?,
     val source: String?,
     val category: String?,
-    val content: String? = null
+    val content: String? = null,
+    val url: String? = null,
 )
 
 fun NewsEntity.toNewsItem(): NewsItem {
@@ -25,6 +26,6 @@ fun NewsEntity.toNewsItem(): NewsItem {
         source = source,
         category = category,
         content = content,
-        url = null
+        url = url
     )
 }
