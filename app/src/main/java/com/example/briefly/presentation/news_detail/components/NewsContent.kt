@@ -77,10 +77,14 @@ fun NewsContent(
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
+
+        // Assumes all images maintain a consistent aspect ratio from API response
+        // Show alt-text from API response if the image is not available, otherwise have a default fallback
         AsyncImage(
             model = ImageRequest
                 .Builder(LocalContext.current)
                 .data(imageUrl)
+                // Additionally show a default placeholder and use a fallback till the image is loaded or fails to load
                 .error(R.drawable.news_image_error)
                 .crossfade(true)
                 .build(),

@@ -69,4 +69,17 @@ class NewsViewModelTest {
 
     }
 
+    // Additional test cases:
+    // Pull-to-refresh makes a call to refresh news list from API
+    // Refresh while offline should fallback to cached data
+    // If there's an API error and no cached data, shows "No data available"
+    // On initial load, if there's no internet connectivity, shows "No internet connection"
+
+    // UI test cases
+    // Pull-to-refresh spinner is shown while refreshing
+    // Clicking on list item navigates to detail screen
+    // Cached data is immediately shown when navigated to detail screen
+    // Error message is shown when there's no internet connectivity
+
+
 }

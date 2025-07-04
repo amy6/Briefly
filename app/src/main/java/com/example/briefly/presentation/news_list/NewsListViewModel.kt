@@ -51,6 +51,7 @@ class NewsListViewModel @Inject constructor(
 
     fun refreshNewsList(fromUser: Boolean = true) {
         if (fromUser) {
+            // UI-specific state to show pull-to-refresh spinner only on manual refresh
             _state.update {
                 it.copy(
                     isRefreshing = true
@@ -69,6 +70,9 @@ class NewsListViewModel @Inject constructor(
 
                 is Error -> {
                     val shouldShowRetry = _state.value.news.isEmpty()
+
+                    // Fallback: Show full-screen retry UI only if there's no cached news
+                    // Else, show Toast as non-blocking feedback
                     _state.update {
                         it.copy(
                             isRefreshing = false,

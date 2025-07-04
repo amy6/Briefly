@@ -6,6 +6,9 @@ import com.example.briefly.domain.usecase.GetNewsListUseCase
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
+// UseCase layer can be omitted here as it is only delegating to repository
+// This can help reduce unnecessary abstraction
+
 class GetNewsUseCaseImpl @Inject constructor(
     private val newsRepository: NewsRepository
 ) : GetNewsListUseCase {

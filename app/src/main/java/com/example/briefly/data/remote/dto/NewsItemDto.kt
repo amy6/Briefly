@@ -13,6 +13,8 @@ data class NewsItemDto(
     val webUrl: String?,
 )
 
+// Move to a Mapper class in the core module if transformations are complex or reused extensively
+
 fun NewsItemDto.toNewsItem(): NewsItem {
     return NewsItem(
         id = id,

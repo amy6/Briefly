@@ -7,6 +7,10 @@ import kotlinx.coroutines.withTimeout
 import okio.IOException
 import retrofit2.HttpException
 
+// A generic helper to safely execute suspend API calls
+// Wraps the result in a Result<T>, catching exceptions like IO/network failures
+// Ensures ViewModel/UI can handle states like success, error, or loading uniformly
+
 suspend inline fun <T> safeApiFlow(
     networkUtils: NetworkUtils,
     timeoutMillis: Long = 15_000,
