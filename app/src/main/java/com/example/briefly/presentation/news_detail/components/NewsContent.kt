@@ -1,6 +1,5 @@
 package com.example.briefly.presentation.news_detail.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,8 +19,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImagePainter
-import coil3.compose.rememberAsyncImagePainter
+import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.request.error
@@ -42,24 +40,6 @@ fun NewsContent(
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
     ) {
-        val painter = rememberAsyncImagePainter(
-            model = ImageRequest
-                .Builder(LocalContext.current)
-                .data(imageUrl)
-                .error(R.drawable.news_image_error)
-                .crossfade(true)
-                .build()
-        )
-        val imageState = painter.state
-        val imageHeight = when (imageState.value) {
-            is AsyncImagePainter.State.Success -> 240.dp
-            else -> 120.dp
-        }
-        val contentScale = when (imageState.value) {
-            is AsyncImagePainter.State.Success -> ContentScale.Crop
-            else -> ContentScale.Fit
-        }
-
         Text(
             text = title,
             style = MaterialTheme.typography.titleLarge,
@@ -92,13 +72,18 @@ fun NewsContent(
             }
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Image(
-            painter = painter,
+        AsyncImage(
+            model = ImageRequest
+                .Builder(LocalContext.current)
+                .data(imageUrl)
+                .error(R.drawable.news_image_error)
+                .crossfade(true)
+                .build(),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(imageHeight),
-            contentScale = contentScale,
+                .height(240.dp),
+            contentScale = ContentScale.Crop,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(

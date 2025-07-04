@@ -12,6 +12,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,6 +25,7 @@ class NewsListViewModel @Inject constructor(
     val refreshNewsListUseCase: RefreshNewsListUseCase,
 ) : ViewModel() {
 
+    private val _isRefreshing = MutableStateFlow(false)
     private val _state = MutableStateFlow(NewsListState())
     val state = _state.asStateFlow()
 
@@ -35,15 +38,16 @@ class NewsListViewModel @Inject constructor(
         viewModelScope.launch {
             getNewsListUseCase()
                 .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-                .collect { result ->
+                .combine(_isRefreshing) { result, isRefreshing ->
                     _state.update {
                         it.copy(
                             news = result,
                             isLoading = false,
+                            isRefreshing = isRefreshing,
                             error = null
                         )
                     }
-                }
+                }.collect()
         }
     }
 
@@ -51,6 +55,7 @@ class NewsListViewModel @Inject constructor(
         _state.update {
             it.copy(
                 isLoading = true,
+                isRefreshing = true
             )
         }
         viewModelScope.launch {
@@ -58,13 +63,15 @@ class NewsListViewModel @Inject constructor(
             when (result) {
                 is Success -> _state.update {
                     it.copy(
-                        isLoading = false
+                        isLoading = false,
+                        isRefreshing = false
                     )
                 }
                 is Loading -> Unit
                 is Error -> _state.update {
                     it.copy(
                         isLoading = false,
+                        isRefreshing = false,
                         error = result.message
                     )
                 }
