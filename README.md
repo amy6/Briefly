@@ -14,6 +14,12 @@ A modern Android news app that displays the latest headlines using the Guardian 
 
 ---
 
+## 📸 Screenshots
+
+
+
+---
+
 ## 🛠️ Tech Stack
 
 | Layer         | Technologies                                      |
@@ -47,6 +53,58 @@ com.example.newsapp
 ├── di              // Hilt modules
 └── utils           // Mappers, extensions, etc.
 ```
+
+## 📖 Design Decisions
+
+- **Jetpack Compose** was used for faster UI development and a reactive UI model.
+- **Clean Architecture** helps separate concerns and makes the codebase more testable and maintainable.
+- **Kotlin Coroutines and Flow** was used for background processing and to manage UI state clearly.
+
+---
+
+## 🧪 Testing
+
+- Unit tests are written for ViewModel, Respository and UseCases.
+- Used Mockito for mocking fakes 
+
+---
+
+## 🤖 Developer Tools & AI Collaboration
+
+To enhance development efficiency and design quality, this project was supported by the following AI tools:
+
+### ChatGPT (OpenAI)
+Used for:
+- Code architecture decisions and best practices (Clean Architecture layering)
+- Reviewing ViewModel and UseCase logic
+- Explaining and debugging Kotlin Coroutines and StateFlow behavior
+- Creating unit test strategies and scenarios
+
+### Gemini (via Android Studio)
+Assisted with:
+- Quick in-editor answers to Android-specific tooling or Gradle issues
+
+### Claude (Anthropic)
+Contributed to:
+- UI/UX design suggestions
+- Structuring a minimal and user-friendly detail screen
+
+> This project came together faster and smoother with a little help from AI tools—great for bouncing off ideas, refining code, and keeping things moving.
+
+---
+
+## 🧠 Improvements
+
+Planned or potential areas for future enhancement:
+
+- [ ] Add pagination for endless scrolling in the news list
+- [ ] Add search functionality
+- [ ] Add support for bookmarks/favorites saved offline
+- [ ] Add settings screen (e.g., change category, region, etc.)  
+- [ ] Add shimmer placeholders while loading
+- [ ] Integrate UI tests using Jetpack Compose testing APIs  
+
+---
 
 ## 🚀 Getting Started
 
