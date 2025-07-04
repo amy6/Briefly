@@ -6,8 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.briefly.domain.usecase.GetNewsByIdUseCase
 import com.example.briefly.util.Constants.ARGUMENT_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,11 +38,22 @@ class NewsDetailViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            getNewsByIdUseCase(id).collect { newsItem ->
+            var receivedContent = false
+            getNewsByIdUseCase(id).onEach { newsItem ->
+                receivedContent = newsItem.content != null
                 _state.update {
                     it.copy(
                         newsContent = newsItem,
-                        isLoading = false,
+                        isLoading = !receivedContent,
+                    )
+                }
+            }.launchIn(this)
+
+            delay(3_000)
+            if (!receivedContent) {
+                _state.update {
+                    it.copy(
+                        isLoading = false
                     )
                 }
             }

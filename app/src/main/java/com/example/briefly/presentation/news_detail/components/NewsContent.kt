@@ -1,6 +1,7 @@
 package com.example.briefly.presentation.news_detail.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,9 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +35,8 @@ fun NewsContent(
     publishedDate: String?,
     imageUrl: String?,
     category: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isContentLoading: Boolean = true,
 ) {
     Column(
         modifier = modifier
@@ -86,10 +90,22 @@ fun NewsContent(
             contentScale = ContentScale.Crop,
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = if (content.isNullOrBlank()) "No content available" else content,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+        if (isContentLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp),
+                contentAlignment = Alignment.Center
+            )
+            {
+                CircularProgressIndicator()
+            }
+        } else {
+            Text(
+                text = if (content.isNullOrBlank()) "No content available" else content,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+        }
     }
 }

@@ -9,9 +9,12 @@ import com.example.briefly.data.remote.util.NetworkUtils
 import com.example.briefly.data.remote.util.safeApiFlow
 import com.example.briefly.domain.model.NewsItem
 import com.example.briefly.domain.repository.NewsRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -38,19 +41,21 @@ class NewsRepositoryImpl @Inject constructor(
     override suspend fun getNewsById(id: String): Flow<NewsItem> =
         newsDao.getNewsById(id).onEach { article ->
             if (article.content == null) {
-                val result = safeApiFlow(networkUtils) {
-                    newsApiService.getNewsById(id, apiKey)
-                }
-                when (result) {
-                    is Result.Success -> {
-                        val newsArticleFromRemote = newsApiService.getNewsById(id, apiKey)
-                        val content =
-                            newsArticleFromRemote.response.content?.fields?.bodyText.orEmpty()
-                        newsDao.updateArticleContent(id, content)
+                CoroutineScope(Dispatchers.IO).launch {
+                    val result = safeApiFlow(networkUtils) {
+                        newsApiService.getNewsById(id, apiKey)
                     }
+                    when (result) {
+                        is Result.Success -> {
+                            val newsArticleFromRemote = newsApiService.getNewsById(id, apiKey)
+                            val content =
+                                newsArticleFromRemote.response.content?.fields?.bodyText.orEmpty()
+                            newsDao.updateArticleContent(id, content)
+                        }
 
-                    is Result.Error -> println("Error fetching news article content : ${result.message}")
-                    else -> Unit
+                        is Result.Error -> println("Error fetching news article content : ${result.message}")
+                        else -> Unit
+                    }
                 }
             }
         }.map { it.toNewsItem() }
