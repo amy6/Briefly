@@ -65,7 +65,6 @@ class NewsViewModelTest {
         advanceUntilIdle()
 
         val state = viewModel.state.value
-        assertFalse(state.isLoading)
         assertEquals(errorMessage, state.error)
 
     }

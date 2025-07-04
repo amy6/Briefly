@@ -7,7 +7,7 @@ import com.example.briefly.core.Result.Loading
 import com.example.briefly.core.Result.Success
 import com.example.briefly.domain.usecase.GetNewsListUseCase
 import com.example.briefly.domain.usecase.RefreshNewsListUseCase
-import com.example.briefly.presentation.NewsListState
+import com.example.briefly.presentation.news_list.NewsListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

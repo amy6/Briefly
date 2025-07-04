@@ -1,10 +1,9 @@
-package com.example.briefly
+package com.example.briefly.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.briefly.presentation.NewsApp
 import com.example.briefly.ui.theme.BrieflyTheme
 import dagger.hilt.android.AndroidEntryPoint
 

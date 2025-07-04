@@ -1,11 +1,11 @@
-package com.example.briefly.data
+package com.example.briefly.domain
 
 import com.example.briefly.data.usecase.GetNewsUseCaseImpl
 import com.example.briefly.domain.model.NewsItem
 import com.example.briefly.domain.repository.NewsRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
@@ -42,6 +42,6 @@ class GetNewsUseCaseTest {
 
         val result = useCase().first()
 
-        assertEquals(result, news)
+        TestCase.assertEquals(result, news)
     }
 }

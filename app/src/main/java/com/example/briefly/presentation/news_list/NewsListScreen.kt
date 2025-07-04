@@ -25,7 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import com.example.briefly.R
-import com.example.briefly.presentation.EmptyNewsScreen
+import com.example.briefly.presentation.components.EmptyNewsScreen
 import com.example.briefly.presentation.Screen
 import com.example.briefly.presentation.news_list.components.NewsList
 import kotlinx.coroutines.Dispatchers

@@ -1,4 +1,4 @@
-package com.example.briefly.presentation
+package com.example.briefly.presentation.news_list
 
 import com.example.briefly.domain.model.NewsItem
 
