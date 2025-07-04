@@ -77,6 +77,20 @@ com.example.newsapp
 
 ---
 
+## 🧠 Developer Notes
+
+This project includes inline comments throughout the codebase highlighting:
+
+- ✅ **Design decisions** made during development  
+- 🧪 **Potential test cases** for both UI and logic layers  
+- 🔍 **Areas for improvement**, optimization, or feature enhancement  
+- 🧱 **Assumptions** made based on current API behavior and UI expectations  
+- 🧯 **Fallback handling** for edge cases like null data, image load failure, etc.
+
+These comments serve as a roadmap for future development and showcase the architectural thinking behind this implementation.
+
+---
+
 ## 🤖 Developer Tools & AI Collaboration
 
 To enhance development efficiency and design quality, this project was supported by the following AI tools:
