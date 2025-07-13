@@ -35,6 +35,11 @@ class NewsListViewModel @Inject constructor(
 
     fun getNewsList() {
         viewModelScope.launch {
+            _state.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
             getNewsListUseCase()
                 .collect { result ->
                     val hasData = result.isNotEmpty()

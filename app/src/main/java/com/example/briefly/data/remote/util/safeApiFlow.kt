@@ -22,7 +22,7 @@ suspend inline fun <T> safeApiFlow(
         // Offline scenarios are handled directly in the repository to centralize network error control
         // and maintain clean separation from UI logic. A short delay is added before emitting an error
         // to ensure consistent refresh/loading animations and avoid abrupt state changes in Compose.
-        delay(50)
+        delay(300)
         return Result.Error("No internet connection")
     }
 
