@@ -1,15 +1,16 @@
-package com.example.briefly.data.remote.util
+package com.example.briefly.network
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import com.example.briefly.domain.network.NetworkUtils
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class NetworkUtils @Inject constructor(
+class NetworkUtilsImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
-    fun isConnected(): Boolean {
+): NetworkUtils {
+    override fun isConnected(): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkCapabilities =

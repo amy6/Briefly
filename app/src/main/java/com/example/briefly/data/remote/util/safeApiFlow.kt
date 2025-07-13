@@ -1,5 +1,6 @@
 package com.example.briefly.data.remote.util
 
+import com.example.briefly.domain.network.NetworkUtils
 import com.example.briefly.core.Result
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
