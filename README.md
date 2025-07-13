@@ -115,6 +115,19 @@ Contributed to:
 
 ---
 
+## 🐞 Known Issues & Fixes
+
+1. **Pull-to-refresh indicator doesn't disappear in offline mode**  
+   *Cause:* The refresh flow sets the refreshing flag before the network call and resets it to `false` after failure. However, even though the flag is observed as `false` inside the Composable, the indicator remains visible.  
+   *Status:* The root cause is unclear. It may be related to Compose recomposition timing or how Material3 `PullToRefreshBox` handles state updates during early failures.  
+   *Workaround:* Avoid triggering the refresh flow at all when offline, or force recomposition using an additional flag or key.
+
+2. **Empty screen briefly flashes before cached data loads in offline mode**  
+   *Cause:* UI state is momentarily set to empty before the cached data is emitted.  
+   *Possible Fix:* Preload cached data into the initial UI state, and only show loading or error states after a short debounce or once fallback loading has completed.
+
+---
+
 ## 🧠 Improvements
 
 Planned or potential areas for future enhancement:
