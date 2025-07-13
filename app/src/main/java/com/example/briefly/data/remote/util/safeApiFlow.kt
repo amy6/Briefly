@@ -3,6 +3,7 @@ package com.example.briefly.data.remote.util
 import com.example.briefly.core.Result
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 import okio.IOException
 import retrofit2.HttpException
@@ -17,6 +18,10 @@ suspend inline fun <T> safeApiFlow(
     crossinline apiCall: suspend () -> T,
 ): Result<T> {
     if (!networkUtils.isConnected()) {
+        // Offline scenarios are handled directly in the repository to centralize network error control
+        // and maintain clean separation from UI logic. A short delay is added before emitting an error
+        // to ensure consistent refresh/loading animations and avoid abrupt state changes in Compose.
+        delay(50)
         return Result.Error("No internet connection")
     }
 
