@@ -1,13 +1,13 @@
 package com.example.briefly.data.remote.repository
 
-import com.example.briefly.domain.network.NetworkUtils
 import com.example.briefly.core.Result
 import com.example.briefly.data.local.dao.NewsDao
-import com.example.briefly.data.local.entity.toNewsItem
+import com.example.briefly.data.local.mapper.NewsEntityToDomainMapper.toNewsItem
 import com.example.briefly.data.remote.NewsApiService
-import com.example.briefly.data.remote.dto.toNewsEntity
+import com.example.briefly.data.remote.mapper.NewsDtoToEntityMapper.toNewsEntity
 import com.example.briefly.data.remote.util.safeApiFlow
 import com.example.briefly.domain.model.NewsItem
+import com.example.briefly.domain.network.NetworkUtils
 import com.example.briefly.domain.repository.NewsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
