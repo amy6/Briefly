@@ -3,14 +3,14 @@ package com.example.briefly.data
 import com.example.briefly.core.Result
 import com.example.briefly.data.local.dao.NewsDao
 import com.example.briefly.data.local.entity.NewsEntity
-import com.example.briefly.data.local.entity.toNewsItem
+import com.example.briefly.data.local.mapper.NewsEntityToDomainMapper.toNewsItem
 import com.example.briefly.data.remote.NewsApiService
 import com.example.briefly.data.remote.dto.NewsFieldsDto
 import com.example.briefly.data.remote.dto.NewsItemDto
 import com.example.briefly.data.remote.dto.NewsResponseDto
 import com.example.briefly.data.remote.dto.NewsResultsDto
 import com.example.briefly.data.remote.repository.NewsRepositoryImpl
-import com.example.briefly.data.remote.util.NetworkUtils
+import com.example.briefly.domain.network.NetworkUtils
 import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify

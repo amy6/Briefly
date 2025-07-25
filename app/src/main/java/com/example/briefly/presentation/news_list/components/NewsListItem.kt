@@ -1,7 +1,6 @@
 package com.example.briefly.presentation.news_list.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -31,7 +30,9 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import coil3.request.error
+import coil3.request.placeholder
 import com.example.briefly.R
+import com.example.briefly.util.debounceClickable
 
 @Composable
 fun NewsListItem(
@@ -50,9 +51,11 @@ fun NewsListItem(
     ) {
         Row(
             modifier = modifier
+                .debounceClickable {
+                    onClick()
+                }
                 .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .clickable { onClick() },
+                .height(IntrinsicSize.Min),
         ) {
             Column(
                 modifier = Modifier
@@ -117,6 +120,7 @@ fun NewsListItem(
                 model = ImageRequest
                     .Builder(LocalContext.current)
                     .data(imageUrl)
+                    .placeholder(R.drawable.news_image_error)
                     .error(R.drawable.news_image_error)
                     .crossfade(true)
                     .build(),
